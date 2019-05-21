@@ -19,19 +19,19 @@ def costfunc(w0, w1, x, y):
     return cost
 
 
-# 定义梯地下降函数
-def grandesc(t0, t1, x, y, alpha=0.01):
+# 定义梯度下降函数
+def grandesc(w0, w1, x, y, alpha=0.01):
     num = len(x)
-    pd0, pd1 = 0, 0
+    pd0, pd1 = 0, 0      # 偏导数
     for i in range(num):
-        pd0 = pd0 + t0 + t1 * x[i] - y[i]
-        pd1 = pd1 + (t0 + t1 * x[i] - y[i]) * x[i]
+        pd0 = pd0 + w0 + w1 * x[i] - y[i]
+        pd1 = pd1 + (w0 + w1 * x[i] - y[i]) * x[i]
     pd0 /= num
     pd1 /= num
-    t0 -= alpha * pd0
-    t1 -= alpha * pd1
+    # 权重更新
+    w0 -= alpha * pd0
+    w1 -= alpha * pd1
     return t0, t1
-
 
 
 sample = np.zeros([20, 2])
@@ -45,19 +45,19 @@ Y = sample[:, 1]
 
 
 
-t0, t1 = 1, 1
-cost = np.int64(100)
-times = 100000
+w0, w1 = 1, 1
+cost = 100
+times = 10000
 for i in range(times):
     if cost == 0:
         break
     else:
-        t0, t1 = grandesc(t0, t1, X, Y)
-        cost = costfunc(t0, t1, X, Y)
+        w0, w1 = grandesc(w0, w1, X, Y)
+        cost = costfunc(w0, w1, X, Y)
         print(cost)
 
-print(t0, t1)
-F = X*t1 + t0
+print(w0, w1)
+F = X*w1 + w0
 plt.scatter(X, Y, c='r', marker='x')
 plt.plot(X, F, c='b')
 plt.show()
